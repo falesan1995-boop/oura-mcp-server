@@ -8,6 +8,7 @@ import { handleSSE, handleMessage } from './mcp/server.js';
 import { authenticateMCP } from './middleware/auth.js';
 import { tokenRateLimiter } from './middleware/tokenRateLimit.js';
 import { errorHandler, notFoundHandler, asyncHandler } from './middleware/errorHandler.js';
+import claudeConnectorRoutes from './oauth/claudeConnector.js';
 import { cache } from './utils/cache.js';
 import { getRateLimitInfo } from './oura/client.js';
 import { tokensFileExists } from './oauth/tokens.js';
@@ -64,7 +65,7 @@ app.use(
     allowedHeaders: ['Authorization', 'Content-Type'],
   })
 );
-
+app.use(claudeConnectorRoutes);
 // Rate limiting for MCP endpoints
 const mcpLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
