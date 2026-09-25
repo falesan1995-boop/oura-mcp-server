@@ -37,11 +37,12 @@ router.post('/oauth/claude/register', (req: Request, res: Response) => {
 });
 
 // Single-user server: auto-approve instead of showing a consent screen
-router.get('/oauth/claude/authorize', (req: Request, res: Response) => {
+router.get('/oauth/claude/authorize', (req: Request, res: Response): void => {
   const { redirect_uri, state } = req.query;
 
   if (!redirect_uri || typeof redirect_uri !== 'string') {
-    return res.status(400).send('Missing redirect_uri');
+    res.status(400).send('Missing redirect_uri');
+    return;
   }
 
   const url = new URL(redirect_uri);
@@ -52,7 +53,7 @@ router.get('/oauth/claude/authorize', (req: Request, res: Response) => {
 });
 
 // Exchange the code for the server's existing AUTH_TOKEN
-router.post('/oauth/claude/token', (req: Request, res: Response) => {
+router.post('/oauth/claude/token', (_req: Request, res: Response) => {
   res.json({
     access_token: process.env.AUTH_TOKEN,
     token_type: 'Bearer',
